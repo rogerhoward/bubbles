@@ -14,6 +14,7 @@ STATIC_ROOT = os.path.join(config.PROJECT_DIR, 'static')
 BIN_ROOT = os.path.join(PROJECT_DIR, 'bin')
 PANO_ROOT = os.path.join(config.PROJECT_DIR, STATIC_ROOT, 'panos')
 PREVIEW_ROOT = os.path.join(config.PROJECT_DIR, STATIC_ROOT, 'previews')
+JSON_ROOT = os.path.join(config.PROJECT_DIR, STATIC_ROOT, 'json')
 
 
 #------------------------------------------------#
