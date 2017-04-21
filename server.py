@@ -32,22 +32,35 @@ def aframe(path=None):
         return flask.render_template('index.html', context=config.CONTEXT, panos=utils.get_panos())
 
 
+@app.route('/panos.json')
+@app.route('/panos/<path:path>')
+def panojson(path=None):
+    """
+    Dual routes which support browsing a list of zoomable images on your S3 bucket,
+    and viewing each one in an Open Seadragon viewer.
+    """
+    if path:
+        return flask.send_from_directory(config.STATIC_ROOT, path)
+    else:
+        return flask.jsonify(utils.get_panos())
+
+
+@app.route('/reactvr/')
+@app.route('/reactvr/<path:path>')
+def reactvr(path=None):
+    """
+    Dual routes which support browsing a list of zoomable images on your S3 bucket,
+    and viewing each one in an Open Seadragon viewer.
+    """
+    if path:
+        return flask.render_template('pano_reactvr.html', context=config.CONTEXT, pano=path)
+    else:
+        return flask.render_template('index_reactvr.html', context=config.CONTEXT, panos=utils.get_panos())
+
+
 #------------------------------------------------#
 # REST endpoints                                 #
 #------------------------------------------------#
-
-@app.route('/list/')
-def list():
-    """
-    Simple route which lists all the objects in S3_ZOOM_BUCKET
-    Handy for confirming that uploads are working.
-    """
-    s3 = boto3.resource('s3')
-
-    this_bucket = s3.Bucket(config.S3_ZOOM_BUCKET)
-
-    keys = [x.key for x in this_bucket.objects.all() if x.key.endswith('.dzi')]
-    return flask.jsonify({'keys': keys})
 
 
 @app.route('/info/')

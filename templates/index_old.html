@@ -1,0 +1,81 @@
+<html>
+  <head>
+    <script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
+<script src="https://npmcdn.com/aframe-animation-component@3.0.1"></script>
+<script src="https://npmcdn.com/aframe-event-set-component@3.0.1"></script>
+<script src="https://npmcdn.com/aframe-layout-component@3.0.1"></script>
+<script src="https://npmcdn.com/aframe-template-component@3.0.1"></script>
+<script>
+  AFRAME.registerComponent('set-image', {
+    schema: {
+      on: {type: 'string'},
+      target: {type: 'selector'},
+      src: {type: 'string'},
+      dur: {type: 'number', default: 300}
+    },
+    init: function () {
+      var data = this.data;
+      var el = this.el;
+      this.setupFadeAnimation();
+      el.addEventListener(data.on, function () {
+        // Fade out image.
+        data.target.emit('set-image-fade');
+        // Wait for fade to complete.
+        setTimeout(function () {
+          // Set image.
+          console.log('something', data );
+          data.target.setAttribute('material', 'src', data.src);
+        }, data.dur);
+      });
+    },
+
+
+    setupFadeAnimation: function () {
+      // Appends an <a-animation> that fades to black.
+      console.log('fading');
+    }
+  });
+
+  AFRAME.registerComponent('update-raycaster',{schema:{type:'selector'},init:function(){var raycasterEl=this.data;raycasterEl.components.raycaster.refreshObjects();}});
+
+</script>
+
+  </head>
+  <body>
+
+<a-scene>
+  <a-assets>
+    <audio id="click-sound" crossorigin="anonymous" src="https://cdn.aframe.io/360-image-gallery-boilerplate/audio/click.ogg"></audio>
+    {% for pano in panos %}
+      <img id="{{ pano.id }}" src="/static/{{ pano.pano }}">
+      <img id="{{ pano.id }}-thumb" src="/static/{{ pano.preview }}">
+    {% endfor %}
+     
+    <script id="link" type="text/nunjucks">
+              <a-plane class="link" height="1" width="1"
+                material="shader: flat; src: {{ thumb }}"
+                event-set__1="_event: mousedown; scale: 1 1 1"
+                event-set__2="_event: mouseup; scale: 1.2 1.2 1"
+                event-set__3="_event: mouseenter; scale: 1.2 1.2 1"
+                event-set__4="_event: mouseleave; scale: 1 1 1"
+                set-image="on: click; target: #image-360; src: {{ src }}"
+                sound="on: click; src: #click-sound"
+                update-raycaster="#cursor"></a-plane>
+    </script> 
+  </a-assets>
+   
+  <a-sky id="image-360" radius="10" src="#p3718b3b29ddd6fb4d8994b40578134db"></a-sky>
+   
+  <a-entity id="links" layout="type: line; margin: 1.5" position="0 -1 -4">
+    {% for pano in panos %}
+    <a-entity template="src: #link" data-src="#{{ pano.id }}" data-thumb="#{{ pano.id }}-thumb"></a-entity>
+    {% endfor %}
+  </a-entity>
+   
+  <a-entity camera look-controls>
+    <a-cursor id="cursor" animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150" animation__fusing="property: fusing; startEvents: fusing; from: 1 1 1; to: 0.1 0.1 0.1; dur: 1500" event-set__1="_event: mouseenter; color: springgreen" event-set__2="_event: mouseleave; color: black" raycaster="objects: .link"></a-cursor>
+  </a-entity>
+</a-scene>
+
+  </body>
+</html> 

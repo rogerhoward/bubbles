@@ -1,8 +1,20 @@
 import subprocess, os
 import simplejson as json
+
+import hashlib
+
 from PIL import Image, ImageFilter
 
 import config
+
+
+
+def get_md5(message):    
+    """
+    Returns MD5 of string passed to it.
+    """
+    return hashlib.md5(message.encode('utf-8')).hexdigest()
+
 
 
 def metadata_to_json(image_file, json_file):
@@ -44,8 +56,11 @@ def get_panos():
                 preview_path = os.path.join(config.PREVIEW_ROOT, relative_path)
                 json_path = os.path.join(config.JSON_ROOT, relative_path.replace('.jpg', '.json'))
 
-                this_pano = {'pano': os.path.relpath(path, config.STATIC_ROOT), 'preview': os.path.relpath(preview_path, config.STATIC_ROOT), 'json': os.path.relpath(json_path, config.STATIC_ROOT)}
-                print(this_pano)
+                pano_url = os.path.join('/static', os.path.relpath(path, config.STATIC_ROOT))
+                preview_url = os.path.join('/static', os.path.relpath(preview_path, config.STATIC_ROOT))
+                json_url = os.path.join('/static', os.path.relpath(json_path, config.STATIC_ROOT))
+
+                this_pano = {'pano': pano_url, 'preview': preview_url, 'json':json_url, 'id': 'p{}'.format(get_md5(relative_path))}
 
                 panos.append(this_pano)
 

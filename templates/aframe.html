@@ -4,9 +4,11 @@
   </head>
   <body>
     <a-scene>
-      <a-box color="#6173F4" opacity="0.8" depth="2"></a-box>
-      <a-sphere radius="2" src="/static/{{ pano }}" position="1 1 0"></a-sphere>
-      <a-sky color="#ECECEC"></a-sky>
+      <a-assets>
+      <!-- Images. -->
+        <img id="{{ pano.pano }}" src="/static/{{ pano.pano }}">
+      </a-assets>
+      <a-sky id="image-360" radius="10" src="#city"></a-sky>
     </a-scene>
   </body>
 </html>
