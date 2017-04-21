@@ -2,7 +2,7 @@
 import os
 import flask
 import config
-
+import utils
 
 app = flask.Flask(__name__)
 
@@ -16,10 +16,10 @@ def index(path=None):
     """
     UI homepage.
     """
-    return flask.render_template('index.html', context=config.CONTEXT)
+    return flask.render_template('index.html', context=config.CONTEXT, panos=utils.get_panos())
 
 
-@app.route('/aframe/')
+# @app.route('/aframe/')
 @app.route('/aframe/<path:path>')
 def aframe(path=None):
     """
@@ -27,13 +27,9 @@ def aframe(path=None):
     and viewing each one in an Open Seadragon viewer.
     """
     if path:
-        return flask.render_template('zoom.html', path=path, context=config.CONTEXT)
+        return flask.render_template('aframe.html', context=config.CONTEXT, pano=path)
     else:
-        s3 = boto3.resource('s3')
-        this_bucket = s3.Bucket(config.S3_ZOOM_BUCKET)
-        zooms = [x.key.replace('.dzi', '') for x in this_bucket.objects.all() if x.key.endswith('.dzi')]
-
-        return flask.render_template('home.html', zooms=zooms, context=config.CONTEXT)
+        return flask.render_template('index.html', context=config.CONTEXT, panos=utils.get_panos())
 
 
 #------------------------------------------------#

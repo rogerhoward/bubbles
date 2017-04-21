@@ -55,14 +55,13 @@
                 </tr>
             </thead>
             <tbody>
+
+            {% for pano in panos %}
                 <tr>
                     <td>URL_PREFIX</td>
-                    <td>{{ context.URL_PREFIX }}</td>
+                    <td><a href="/aframe/{{ pano.pano }}">{{ pano.pano }}</a></td>
                 </tr>
-                <tr>
-                    <td>ENV</td>
-                    <td>{{ context.ENV }}</td>
-                </tr>
+            {% endfor %}
                 
             </tbody>
         </table>

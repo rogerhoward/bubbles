@@ -1,4 +1,4 @@
-import subprocess
+import subprocess, os
 import simplejson as json
 from PIL import Image, ImageFilter
 
@@ -30,3 +30,24 @@ def preview_image(original, output):
     output_im.thumbnail((900,300))
     output_im.filter(ImageFilter.UnsharpMask(radius=1.2, percent=125, threshold=3))
     output_im.save(output)
+
+
+
+def get_panos():
+    panos = []
+    for directory, directories, files in os.walk(config.PANO_ROOT, topdown=False, followlinks=True):
+        for name in files:
+            if name.endswith('.jpg'):
+                path = os.path.join(directory, name)
+                relative_path = os.path.relpath(path, config.PANO_ROOT)
+
+                preview_path = os.path.join(config.PREVIEW_ROOT, relative_path)
+                json_path = os.path.join(config.JSON_ROOT, relative_path.replace('.jpg', '.json'))
+
+                this_pano = {'pano': os.path.relpath(path, config.STATIC_ROOT), 'preview': os.path.relpath(preview_path, config.STATIC_ROOT), 'json': os.path.relpath(json_path, config.STATIC_ROOT)}
+                print(this_pano)
+
+                panos.append(this_pano)
+
+    return panos
+
