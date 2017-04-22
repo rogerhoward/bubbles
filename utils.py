@@ -81,12 +81,14 @@ def get_panos_for(gallery=None):
         s3 = boto3.resource('s3')
         this_bucket = s3.Bucket(config.STATIC_BUCKET)
         pano_images = [x.key for x in this_bucket.objects.filter(Prefix='panos/{}'.format(gallery)) if x.key.endswith('.jpg')]
+        pano_images.sort()
 
         panos = [make_pano_record(x) for x in pano_images]
         return panos
     else:
 
         pano_images = [x for x in os.listdir(os.path.join(config.PANO_ROOT, gallery)) if x.endswith('.jpg')]
+        pano_images.sort()
 
         panos = [make_pano_record(x, gallery=gallery) for x in pano_images]
         return panos
@@ -121,6 +123,9 @@ def get_galleries():
         s3 = boto3.resource('s3')
         this_bucket = s3.Bucket(config.STATIC_BUCKET)
         galleries = [x.key.strip('/').replace('panos/','') for x in this_bucket.objects.filter(Prefix='panos/') if ( not x.key.endswith('.jpg') and not x.key =='panos/')]
+        galleries.sort()
         return galleries
     else:
-        return [x for x in os.listdir(config.PANO_ROOT) if not x.startswith('.')]
+        galleries = [x for x in os.listdir(config.PANO_ROOT) if not x.startswith('.')]
+        galleries.sort()
+        return galleries
