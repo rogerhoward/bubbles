@@ -4,6 +4,6 @@
         "aws_region": "us-east-1",
         "profile_name": "default",
         "s3_bucket": "bubbles",
-        "exclude": ["static/*"],
+        "exclude": ["*.jpg", "*.json"],
     }
 }
