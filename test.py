@@ -12,5 +12,5 @@ def main():
     pass
 
 if __name__ == '__main__':
-    p = utils.get_panos_for('Spain')
+    p = utils.get_galleries()
     pprint(p)

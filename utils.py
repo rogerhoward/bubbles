@@ -9,6 +9,9 @@ import config
 import boto3
 
 
+s3 = boto3.resource('s3')
+
+
 def get_md5(message):    
     """
     Returns MD5 of string passed to it.
@@ -69,7 +72,6 @@ def make_pano_record(pano_key):
 
 def get_panos_for(gallery=None):
 
-    s3 = boto3.resource('s3')
     this_bucket = s3.Bucket(config.STATIC_BUCKET)
     pano_images = [x.key for x in this_bucket.objects.filter(Prefix='panos/{}'.format(gallery)) if x.key.endswith('.jpg')]
 
@@ -102,5 +104,7 @@ def get_panos():
 
 
 def get_galleries():
-    return [x for x in os.listdir(config.PANO_ROOT) if not x.startswith('.')]
 
+    this_bucket = s3.Bucket(config.STATIC_BUCKET)
+    galleries = [x.key.strip('/').replace('panos/','') for x in this_bucket.objects.filter(Prefix='panos/') if ( not x.key.endswith('.jpg') and not x.key == 'panos/')]
+    return galleries
