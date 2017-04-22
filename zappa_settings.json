@@ -3,7 +3,8 @@
         "app_function": "server.app",
         "aws_region": "us-east-1",
         "profile_name": "default",
-        "s3_bucket": "bubbles",
+        "s3_bucket": "bubbles-config",
         "exclude": ["*.jpg", "*.json"],
+        "runtime": "python3.6",
     }
 }
