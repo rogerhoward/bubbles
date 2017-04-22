@@ -1,8 +1,5 @@
 #!/usr/bin/env python
-import os, sys
-import PIL.Image
-
-
+import os
 
 #------------------------------------------------#
 # Path settings.                                 #
@@ -31,14 +28,6 @@ STATIC_URL = 'https://s3.amazonaws.com/{}'.format(STATIC_BUCKET)
 #------------------------------------------------#
 
 ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'tif', 'png', ]
-
-RESIZE_FILTERS = {
-    'cubic': PIL.Image.CUBIC,
-    'bilinear': PIL.Image.BILINEAR,
-    'bicubic': PIL.Image.BICUBIC,
-    'nearest': PIL.Image.NEAREST,
-    'antialias': PIL.Image.ANTIALIAS,
-    }
 
 
 #------------------------------------------------#
