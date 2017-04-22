@@ -2,5 +2,5 @@ flask
 requests
 Pillow
 simplejson
-zappa
 boto3
+awsebcli
