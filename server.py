@@ -3,9 +3,10 @@ import os
 import flask
 import config
 import utils
+import boto3
 
 app = flask.Flask(__name__)
-
+s3 = boto3.resource('s3')
 
 #------------------------------------------------#
 #  UI endpoints                                  #
