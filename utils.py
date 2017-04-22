@@ -53,25 +53,43 @@ def small_image(original, output):
     im.save(output)
 
 
-def make_pano_record(pano_key):
-    base_key = pano_key.replace('panos/','').replace(' ', '+')
+def make_pano_record(pano_key, gallery=None):
+    if config.USE_S3:
+        base_key = pano_key.replace('panos/','').replace(' ', '+')
 
-    pano_url = '{}/panos/{}'.format(config.STATIC_URL, base_key)
-    preview_url = '{}/previews/{}'.format(config.STATIC_URL, base_key)
-    small_url = '{}/small/{}'.format(config.STATIC_URL, base_key)
-    json_url = '{}/json/{}'.format(config.STATIC_URL, base_key.replace('.jpg', '.json'))
+        pano_url = '{}/panos/{}'.format(config.STATIC_URL, base_key)
+        preview_url = '{}/previews/{}'.format(config.STATIC_URL, base_key)
+        small_url = '{}/small/{}'.format(config.STATIC_URL, base_key)
+        json_url = '{}/json/{}'.format(config.STATIC_URL, base_key.replace('.jpg', '.json'))
 
-    this_pano = {'pano': pano_url, 'preview': preview_url, 'small': small_url, 'json': json_url, 'id': 'p{}'.format(get_md5(base_key))}
-    return this_pano
+        this_pano = {'pano': pano_url, 'preview': preview_url, 'small': small_url, 'json': json_url, 'id': 'p{}'.format(get_md5(base_key))}
+        return this_pano
+    else:
+        base_key = '{}/{}'.format(gallery, pano_key)
+
+        pano_url = '{}/panos/{}'.format('/static', base_key)
+        preview_url = '{}/previews/{}'.format('/static', base_key)
+        small_url = '{}/small/{}'.format('/static', base_key)
+        json_url = '{}/json/{}'.format('/static', base_key.replace('.jpg', '.json'))
+
+        this_pano = {'pano': pano_url, 'preview': preview_url, 'small': small_url, 'json': json_url, 'id': 'p{}'.format(get_md5(base_key))}
+        return this_pano
 
 
 def get_panos_for(gallery=None):
-    s3 = boto3.resource('s3')
-    this_bucket = s3.Bucket(config.STATIC_BUCKET)
-    pano_images = [x.key for x in this_bucket.objects.filter(Prefix='panos/{}'.format(gallery)) if x.key.endswith('.jpg')]
+    if config.USE_S3:
+        s3 = boto3.resource('s3')
+        this_bucket = s3.Bucket(config.STATIC_BUCKET)
+        pano_images = [x.key for x in this_bucket.objects.filter(Prefix='panos/{}'.format(gallery)) if x.key.endswith('.jpg')]
 
-    panos = [make_pano_record(x) for x in pano_images]
-    return panos
+        panos = [make_pano_record(x) for x in pano_images]
+        return panos
+    else:
+
+        pano_images = [x for x in os.listdir(os.path.join(config.PANO_ROOT, gallery)) if x.endswith('.jpg')]
+
+        panos = [make_pano_record(x, gallery=gallery) for x in pano_images]
+        return panos
 
 
 def get_panos():
@@ -99,7 +117,10 @@ def get_panos():
 
 
 def get_galleries():
-    s3 = boto3.resource('s3')
-    this_bucket = s3.Bucket(config.STATIC_BUCKET)
-    galleries = [x.key.strip('/').replace('panos/','') for x in this_bucket.objects.filter(Prefix='panos/') if ( not x.key.endswith('.jpg') and not x.key =='panos/')]
-    return galleries
+    if config.USE_S3:
+        s3 = boto3.resource('s3')
+        this_bucket = s3.Bucket(config.STATIC_BUCKET)
+        galleries = [x.key.strip('/').replace('panos/','') for x in this_bucket.objects.filter(Prefix='panos/') if ( not x.key.endswith('.jpg') and not x.key =='panos/')]
+        return galleries
+    else:
+        return [x for x in os.listdir(config.PANO_ROOT) if not x.startswith('.')]

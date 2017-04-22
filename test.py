@@ -13,4 +13,7 @@ def main():
 
 if __name__ == '__main__':
     p = utils.get_galleries()
+
     pprint(p)
+
+    [pprint(utils.get_panos_for(x)) for x in p]
