@@ -5,6 +5,6 @@
         "profile_name": "default",
         "s3_bucket": "bubbles-config",
         "exclude": ["*.jpg", "*.json"],
-        "runtime": "python3.6",
+        "runtime": "python2.7",
     }
 }
