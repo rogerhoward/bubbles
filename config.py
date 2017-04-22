@@ -19,6 +19,14 @@ JSON_ROOT = os.path.join(STATIC_ROOT, 'json')
 
 
 #------------------------------------------------#
+# S3 settings                                    #
+#------------------------------------------------#
+
+STATIC_BUCKET = 'bubbles-static'
+STATIC_URL = 'https://s3.amazonaws.com/{}/'.format(STATIC_BUCKET)
+
+
+#------------------------------------------------#
 # PIL settings.                                  #
 #------------------------------------------------#
 
