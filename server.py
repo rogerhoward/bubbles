@@ -26,7 +26,7 @@ def gallery(path=None):
     Dual routes which support browsing a list of zoomable images on your S3 bucket,
     and viewing each one in an Open Seadragon viewer.
     """
-    return flask.render_template('gallery.html', context=config.CONTEXT, panos=utils.get_panos_for(path))
+    return flask.render_template('gallery.html', context=config.CONTEXT, gallery=path, panos=utils.get_panos_for(path))
 
 
 

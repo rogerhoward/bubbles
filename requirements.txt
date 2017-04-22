@@ -3,3 +3,4 @@ requests
 Pillow
 simplejson
 zappa
+boto3

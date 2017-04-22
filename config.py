@@ -23,7 +23,7 @@ JSON_ROOT = os.path.join(STATIC_ROOT, 'json')
 #------------------------------------------------#
 
 STATIC_BUCKET = 'bubbles-static'
-STATIC_URL = 'https://s3.amazonaws.com/{}/'.format(STATIC_BUCKET)
+STATIC_URL = 'https://s3.amazonaws.com/{}'.format(STATIC_BUCKET)
 
 
 #------------------------------------------------#
@@ -75,4 +75,4 @@ if 'AWS_SECRET_ACCESS_KEY' in ENV:
 # Context dict for passing to templates          #
 #------------------------------------------------#
 
-CONTEXT = {'URL_PREFIX': URL_PREFIX, 'ENV': ENV}
+CONTEXT = {'URL_PREFIX': URL_PREFIX, 'ENV': ENV, 'STATIC_PREFIX': STATIC_URL}
