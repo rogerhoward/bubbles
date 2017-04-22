@@ -5,9 +5,3 @@
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
-
-bin/*
-static/json/*
-static/panos/*
-static/previews/*
-static/small/*
