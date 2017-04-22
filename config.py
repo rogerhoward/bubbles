@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import os, sys
 import PIL.Image
-import config
 
 
 
@@ -10,11 +9,13 @@ import config
 #------------------------------------------------#
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(config.PROJECT_DIR, 'static')
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 BIN_ROOT = os.path.join(PROJECT_DIR, 'bin')
-PANO_ROOT = os.path.join(config.PROJECT_DIR, STATIC_ROOT, 'panos')
-PREVIEW_ROOT = os.path.join(config.PROJECT_DIR, STATIC_ROOT, 'previews')
-JSON_ROOT = os.path.join(config.PROJECT_DIR, STATIC_ROOT, 'json')
+
+PANO_ROOT = os.path.join(STATIC_ROOT, 'panos')
+PREVIEW_ROOT = os.path.join(STATIC_ROOT, 'previews')
+SMALL_ROOT = os.path.join(STATIC_ROOT, 'small')
+JSON_ROOT = os.path.join(STATIC_ROOT, 'json')
 
 
 #------------------------------------------------#

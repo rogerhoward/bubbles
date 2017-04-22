@@ -24,7 +24,7 @@
         <!-- Image link template to be reused. -->
         <script id="link" type="text/html">
           <a-entity class="link"
-            geometry="primitive: plane; height: 0.2; width: 0.1"
+            geometry="primitive: sphere; height: 0.1; width: 0.1"
             material="shader: flat; src: ${thumb}"
             event-set__1="_event: mousedown; scale: 1 1 1"
             event-set__2="_event: mouseup; scale: 1.2 1.2 1"
@@ -36,11 +36,11 @@
       </a-assets>
 
       <!-- 360-degree image. -->
-      <a-sky id="image-360" radius="100" src="#{{ panos[0].id }}"></a-sky>
+      <a-sky id="image-360" radius="10" src="#{{ panos[0].id }}"></a-sky>
 
       <!-- Image links. -->
-      <!-- <a-entity id="links" layout="type: line; margin: 1.5" position="0 -1 -4"> -->
-      <a-entity id="links" layout="type: circle; margin: 1.5" position="0 -1 0">
+      <a-entity id="links" layout="type: circle; radius: 8" position="0 -2 0">
+      <!-- <a-entity id="links" layout="type: line; margin: 1.5" position="0 -1 0"> -->
       {% for pano in panos %}
         <a-entity template="src: #link" data-src="#{{ pano.id }}" data-thumb="#{{ pano.id }}-thumb"></a-entity>
       {% endfor %}

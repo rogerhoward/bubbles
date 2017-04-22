@@ -21,9 +21,11 @@ if __name__ == '__main__':
                     relative_path = os.path.relpath(path, config.PANO_ROOT)
 
                     preview_path = os.path.join(config.PREVIEW_ROOT, relative_path)
+                    small_path = os.path.join(config.SMALL_ROOT, relative_path)
                     json_path = os.path.join(config.JSON_ROOT, relative_path.replace('.jpg', '.json'))
 
                     utils.preview_image(path, preview_path)
+                    utils.small_image(path, small_path)
                     utils.metadata_to_json(path, json_path)
 
                     pprint((path, preview_path, json_path))

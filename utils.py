@@ -18,6 +18,7 @@ def get_md5(message):
 
 
 def metadata_to_json(image_file, json_file):
+    os.makedirs(os.path.dirname(json_file), exist_ok=True)
     try:
         exiftool_output = json.loads(subprocess.check_output([config.EXIFTOOL_PATH, '-m', '-G', '-struct', '-s', '-s', '-g', '-json', image_file]))[0]
         with open(json_file, 'w') as open_json_file:
@@ -28,6 +29,8 @@ def metadata_to_json(image_file, json_file):
 
 
 def preview_image(original, output):
+    os.makedirs(os.path.dirname(output), exist_ok=True)
+
 
     im = Image.open(original)
     width, height = im.size   # Get dimensions
@@ -39,10 +42,42 @@ def preview_image(original, output):
     bottom = (height + new_height)/2
 
     output_im = im.crop((left, top, right, bottom))
-    output_im.thumbnail((900,300))
+    output_im.thumbnail((900, 300))
     output_im.filter(ImageFilter.UnsharpMask(radius=1.2, percent=125, threshold=3))
     output_im.save(output)
 
+
+def small_image(original, output):
+    os.makedirs(os.path.dirname(output), exist_ok=True)
+    im = Image.open(original)
+    width, height = im.size
+    im.thumbnail((1024, 512))
+    im.save(output)
+
+
+
+def get_panos_for(gallery=None):
+    panos = []
+    for directory, directories, files in os.walk(os.path.join(config.PANO_ROOT, gallery), topdown=False, followlinks=True):
+        for name in files:
+            if name.endswith('.jpg'):
+                path = os.path.join(directory, name)
+                relative_path = os.path.relpath(path, config.PANO_ROOT)
+
+                preview_path = os.path.join(config.PREVIEW_ROOT, relative_path)
+                small_path = os.path.join(config.SMALL_ROOT, relative_path)
+                json_path = os.path.join(config.JSON_ROOT, relative_path.replace('.jpg', '.json'))
+
+                pano_url = os.path.join('/static', os.path.relpath(path, config.STATIC_ROOT))
+                preview_url = os.path.join('/static', os.path.relpath(preview_path, config.STATIC_ROOT))
+                small_url = os.path.join('/static', os.path.relpath(small_path, config.STATIC_ROOT))
+                json_url = os.path.join('/static', os.path.relpath(json_path, config.STATIC_ROOT))
+
+                this_pano = {'pano': pano_url, 'preview': preview_url, 'small': small_url, 'json':json_url, 'id': 'p{}'.format(get_md5(relative_path))}
+
+                panos.append(this_pano)
+
+    return panos
 
 
 def get_panos():
@@ -54,15 +89,21 @@ def get_panos():
                 relative_path = os.path.relpath(path, config.PANO_ROOT)
 
                 preview_path = os.path.join(config.PREVIEW_ROOT, relative_path)
+                small_path = os.path.join(config.SMALL_ROOT, relative_path)
                 json_path = os.path.join(config.JSON_ROOT, relative_path.replace('.jpg', '.json'))
 
                 pano_url = os.path.join('/static', os.path.relpath(path, config.STATIC_ROOT))
                 preview_url = os.path.join('/static', os.path.relpath(preview_path, config.STATIC_ROOT))
+                small_url = os.path.join('/static', os.path.relpath(small_path, config.STATIC_ROOT))
                 json_url = os.path.join('/static', os.path.relpath(json_path, config.STATIC_ROOT))
 
-                this_pano = {'pano': pano_url, 'preview': preview_url, 'json':json_url, 'id': 'p{}'.format(get_md5(relative_path))}
+                this_pano = {'pano': pano_url, 'preview': preview_url, 'small': small_url, 'json':json_url, 'id': 'p{}'.format(get_md5(relative_path))}
 
                 panos.append(this_pano)
 
     return panos
+
+
+def get_galleries():
+    return [x for x in os.listdir(config.PANO_ROOT) if not x.startswith('.')]
 

@@ -27,8 +27,8 @@
             geometry="primitive: sphere; height: 0.1; width: 0.1"
             material="shader: flat; src: ${thumb}"
             event-set__1="_event: mousedown; scale: 1 1 1"
-            event-set__2="_event: mouseup; scale: 1.2 1.2 1"
-            event-set__3="_event: mouseenter; scale: 1.2 1.2 1"
+            event-set__2="_event: mouseup; scale: 1.4 1.4 1.4"
+            event-set__3="_event: mouseenter; scale: 1.4 1.4 1.4"
             event-set__4="_event: mouseleave; scale: 1 1 1"
             set-image="on: click; target: #image-360; src: ${src}"
             sound="on: click; src: #click-sound"></a-entity>
@@ -39,7 +39,7 @@
       <a-sky id="image-360" radius="10" src="#{{ panos[0].id }}"></a-sky>
 
       <!-- Image links. -->
-      <a-entity id="links" layout="type: circle; radius: 8" position="0 -2 0">
+      <a-entity id="links" layout="type: circle; radius: 6" position="0 -2.2 0">
       <!-- <a-entity id="links" layout="type: line; margin: 1.5" position="0 -1 0"> -->
       {% for pano in panos %}
         <a-entity template="src: #link" data-src="#{{ pano.id }}" data-thumb="#{{ pano.id }}-thumb"></a-entity>

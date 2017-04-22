@@ -16,7 +16,18 @@ def index(path=None):
     """
     UI homepage.
     """
-    return flask.render_template('index.html', context=config.CONTEXT, panos=utils.get_panos())
+    return flask.render_template('home.html', context=config.CONTEXT, galleries=utils.get_galleries())
+
+
+# @app.route('/aframe/')
+@app.route('/gallery/<path:path>')
+def gallery(path=None):
+    """
+    Dual routes which support browsing a list of zoomable images on your S3 bucket,
+    and viewing each one in an Open Seadragon viewer.
+    """
+    return flask.render_template('gallery.html', context=config.CONTEXT, panos=utils.get_panos_for(path))
+
 
 
 # @app.route('/aframe/')
