@@ -5,7 +5,8 @@ import config
 import utils
 import boto3
 
-app = flask.Flask(__name__)
+application = flask.Flask(__name__)
+app = application
 s3 = boto3.resource('s3')
 
 #------------------------------------------------#
