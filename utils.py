@@ -1,15 +1,10 @@
 import subprocess, os
 import simplejson as json
-
 import hashlib
-
 from PIL import Image, ImageFilter
 
 import config
 import boto3
-
-
-s3 = boto3.resource('s3')
 
 
 def get_md5(message):    
