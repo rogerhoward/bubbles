@@ -3,3 +3,4 @@ Pillow
 simplejson
 boto3
 awsebcli
+uwsgi
