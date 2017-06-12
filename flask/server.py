@@ -13,6 +13,37 @@ s3 = boto3.resource('s3')
 #  UI endpoints                                  #
 #------------------------------------------------#
 
+
+@app.route('/api/galleries')
+@app.route('/api/galleries/<path:path>')
+def api_galleries(path=None):
+    """
+    UI homepage.
+    """
+    if path:
+        return flask.jsonify(utils.get_panos_for(path))
+    else:
+        return flask.jsonify(utils.get_galleries())
+
+
+@app.route('/api/panos')
+@app.route('/api/panos/<path:path>')
+def api_panos(path=None):
+    """
+    Dual routes which support browsing a list of zoomable images on your S3 bucket,
+    and viewing each one in an Open Seadragon viewer.
+    """
+    if path:
+        return flask.send_from_directory(config.STATIC_ROOT, path)
+    else:
+        return flask.jsonify(utils.get_panos_for(path))
+
+
+
+#------------------------------------------------#
+#  UI endpoints                                  #
+#------------------------------------------------#
+
 @app.route('/')
 def index(path=None):
     """
@@ -29,7 +60,6 @@ def gallery(path=None):
     and viewing each one in an Open Seadragon viewer.
     """
     return flask.render_template('gallery.html', context=config.CONTEXT, gallery=path, panos=utils.get_panos_for(path))
-
 
 
 # @app.route('/aframe/')

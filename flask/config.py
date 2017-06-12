@@ -6,8 +6,8 @@ import os
 #------------------------------------------------#
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
-BIN_ROOT = os.path.join(PROJECT_DIR, 'bin')
+STATIC_ROOT = os.path.join(os.path.dirname(PROJECT_DIR), 'static')
+BIN_ROOT = os.path.join(os.path.dirname(PROJECT_DIR), 'bin')
 
 PANO_ROOT = os.path.join(STATIC_ROOT, 'panos')
 PREVIEW_ROOT = os.path.join(STATIC_ROOT, 'previews')
